@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerry Fu · 多语播音 / 配音 / 开发</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Noto+Sans+SC:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17131F;
+    --ink-2:#1F1929;
+    --ink-3:#2C2440;
+    --line:rgba(243,236,224,.10);
+    --paper:#F3ECE0;
+    --muted:#A89FB5;
+    --amber:#FF7A45;
+    --amber-soft:#F6B17A;
+    --rose:#E7708E;
+    --gold:#E8B44A;
+    --violet:#B794F4;
+    --display:'Fraunces',Georgia,serif;
+    --sans:'Noto Sans SC',system-ui,-apple-system,sans-serif;
+    --mono:'Space Mono','Noto Sans SC',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(23,19,31,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{font-family:var(--mono);font-weight:700;letter-spacing:.1em;font-size:15px}
+  .brand .dot{color:var(--amber)}
+  .nav{display:flex;gap:30px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--muted)}
+  .nav a{transition:color .2s}
+  .nav a:hover,.nav a:focus-visible{color:var(--paper)}
+  .nav-cn{font-family:var(--sans);letter-spacing:.05em}
+  @media(max-width:680px){.nav{display:none}}
+
+  /* ---------- live pill ---------- */
+  .live{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--amber)}
+  .live .pulse{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 0 rgba(255,122,69,.6);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,122,69,.55)}70%{box-shadow:0 0 0 11px rgba(255,122,69,0)}100%{box-shadow:0 0 0 0 rgba(255,122,69,0)}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:170px 0 90px;overflow:hidden}
+  .hero-glow{
+    position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+    width:900px;height:680px;
+    background:radial-gradient(ellipse at center,rgba(255,122,69,.16),rgba(231,112,142,.07) 40%,transparent 68%);
+    pointer-events:none;filter:blur(8px);
+  }
+  .hero .wrap{position:relative}
+  .hero-top{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-bottom:34px}
+  .freq{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--muted)}
+
+  .name{
+    font-family:var(--display);
+    font-weight:900;
+    font-size:clamp(64px,13vw,160px);
+    line-height:.92;
+    letter-spacing:-.02em;
+    margin-bottom:24px;
+  }
+  .tagline{
+    font-family:var(--display);
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(22px,3.4vw,38px);
+    color:var(--paper);
+    line-height:1.25;
+    max-width:18ch;
+    margin-bottom:14px;
+  }
+  .tagline .accent{color:var(--amber);font-style:normal;font-weight:600}
+  .role{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:46px}
+
+  /* greeting cycle */
+  .greet{height:1.4em;display:flex;align-items:baseline;gap:16px;margin-bottom:40px;font-size:clamp(20px,2.6vw,30px)}
+  .greet-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;white-space:nowrap;transform:translateY(-2px)}
+  .greet-word{font-family:var(--display);font-weight:600;color:var(--amber-soft);transition:opacity .45s ease,transform .45s ease}
+
+  /* waveform signature */
+  .wave{display:flex;align-items:flex-end;gap:4px;height:74px;margin-bottom:50px;max-width:560px}
+  .wave .bar{
+    flex:1;
+    background:linear-gradient(to top,var(--amber),var(--amber-soft));
+    border-radius:3px 3px 0 0;
+    transform-origin:bottom;
+    opacity:.92;
+    animation:eq 1.5s ease-in-out infinite;
+  }
+  @keyframes eq{0%,100%{transform:scaleY(.22)}50%{transform:scaleY(1)}}
+
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+    padding:14px 24px;border-radius:40px;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:transform .2s,background .2s,border-color .2s,color .2s;
+  }
+  .btn-fill{background:var(--amber);color:var(--ink);font-weight:700}
+  .btn-fill:hover,.btn-fill:focus-visible{transform:translateY(-2px);background:var(--amber-soft)}
+  .btn-line{border:1px solid var(--line);color:var(--paper)}
+  .btn-line:hover,.btn-line:focus-visible{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+
+  /* ---------- section frame ---------- */
+  section{padding:88px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:48px;flex-wrap:wrap}
+  .sec-no{font-family:var(--mono);font-size:13px;color:var(--amber);letter-spacing:.1em}
+  .sec-title{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.6vw,52px);letter-spacing:-.01em}
+  .sec-en{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-left:auto}
+
+  /* about */
+  .about-text{font-size:clamp(18px,2.3vw,24px);line-height:1.7;max-width:62ch;color:#E8E0D2}
+  .about-text strong{color:var(--amber-soft);font-weight:500}
+
+  /* languages */
+  .freqs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .freq-row{
+    display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;
+    padding:26px 6px;border-bottom:1px solid var(--line);
+    transition:padding-left .25s,background .25s;
+  }
+  .freq-row:hover{padding-left:18px;background:linear-gradient(90deg,rgba(255,122,69,.05),transparent)}
+  .freq-lang{display:flex;align-items:center;gap:16px}
+  .freq-lang .led{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+  .freq-name{font-family:var(--display);font-size:clamp(24px,3vw,34px);font-weight:600;line-height:1}
+  .freq-note{color:var(--muted);font-size:15px}
+  .freq-level{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--paper);border:1px solid var(--line);padding:6px 13px;border-radius:30px;white-space:nowrap}
+  @media(max-width:640px){
+    .freq-row{grid-template-columns:1fr auto;gap:6px 16px}
+    .freq-note{grid-column:1/-1;order:3}
+  }
+
+  /* work */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{
+    background:var(--ink-2);border:1px solid var(--line);border-radius:18px;
+    padding:30px;transition:transform .25s,border-color .25s;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,122,69,.4)}
+  .card-kind{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:18px}
+  .card-title{font-family:var(--display);font-size:25px;font-weight:600;margin-bottom:10px}
+  .card-desc{color:var(--muted);font-size:15px}
+  .card-arrow{position:absolute;top:28px;right:28px;color:var(--muted);transition:color .25s,transform .25s}
+  .card:hover .card-arrow{color:var(--amber);transform:translate(3px,-3px)}
+
+  /* contact */
+  .contact-grid{display:flex;flex-wrap:wrap;gap:14px}
+  .ct{
+    display:flex;align-items:center;gap:14px;
+    border:1px solid var(--line);border-radius:14px;padding:18px 22px;
+    font-family:var(--mono);font-size:14px;letter-spacing:.04em;
+    transition:border-color .25s,transform .25s,color .25s;
+  }
+  .ct:hover,.ct:focus-visible{border-color:var(--amber);color:var(--amber);transform:translateY(-3px)}
+  .ct .k{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:44px 0;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:12px;letter-spacing:.08em}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto}
+    .wave .bar{transform:scaleY(.6)}
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">JF<span class="dot">.</span></div>
+      <nav class="nav">
+        <a href="#about" class="nav-cn">关于</a>
+        <a href="#freqs" class="nav-cn">语言</a>
+        <a href="#contact" class="nav-cn">联系</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero" id="top">
+    <div class="hero-glow"></div>
+    <div class="wrap">
+      <div class="hero-top">
+        <span class="live"><span class="pulse"></span>ON AIR · 正在播出</span>
+        <span class="freq">FM 88.6 · 全语频段 / ALL FREQUENCIES</span>
+      </div>
+
+      <h1 class="name">Jerry&nbsp;Fu</h1>
+      <p class="tagline">四种语言,<br><span class="accent">一个声音。</span></p>
+      <p class="role">中文 · 日本語 · Español · English &nbsp;—&nbsp; Broadcaster / Voice / Developer</p>
+
+      <div class="greet">
+        <span class="greet-label">每天开播于</span>
+        <span class="greet-word" id="greet">你好</span>
+      </div>
+
+      <div class="wave" id="wave" aria-hidden="true"></div>
+
+      <div class="cta-row">
+        <a href="#about" class="btn btn-fill">收听简介 ↓</a>
+        <a href="#contact" class="btn btn-line">给我留言 →</a>
+      </div>
+    </div>
+  </main>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no">01</span>
+        <h2 class="sec-title">关于</h2>
+        <span class="sec-en">About</span>
+      </div>
+      <p class="about-text">
+        中国传媒大学<strong>西班牙语</strong>在读。把声音当作媒介,在中文、日语、西班牙语和英语之间自由切换——做<strong>播音、配音</strong>,也写代码、做产品。
+        既能在话筒前讲一段干净的双语新闻,也能在终端里 flash 一套自己改的 ROM。
+        相信好的声音和好的代码一样:有节奏、有结构、让人愿意一直听下去。
+      </p>
+    </div>
+  </section>
+
+  <section id="freqs">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no">02</span>
+        <h2 class="sec-title">我的频段</h2>
+        <span class="sec-en">Frequencies</span>
+      </div>
+      <div class="freqs">
+        <div class="freq-row">
+          <div class="freq-lang"><span class="led" style="background:var(--amber)"></span><span class="freq-name">中文</span></div>
+          <span class="freq-note">播音主持 · 配音 · 双语口播</span>
+          <span class="freq-level">母语 / NATIVE</span>
+        </div>
+        <div class="freq-row">
+          <div class="freq-lang"><span class="led" style="background:var(--rose)"></span><span class="freq-name">日本語</span></div>
+          <span class="freq-note">朗读 · 会话 · 含关西腔（おおきに！）</span>
+          <span class="freq-level">流暢 / FLUENT</span>
+        </div>
+        <div class="freq-row">
+          <div class="freq-lang"><span class="led" style="background:var(--gold)"></span><span class="freq-name">Español</span></div>
+          <span class="freq-note">广播 · 朗读 · 专业方向</span>
+          <span class="freq-level">进行中 / GROWING</span>
+        </div>
+        <div class="freq-row">
+          <div class="freq-lang"><span class="led" style="background:var(--violet)"></span><span class="freq-name">English</span></div>
+          <span class="freq-note">双语播音 · 配音</span>
+          <span class="freq-level">专业 / PRO</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no">03</span>
+        <h2 class="sec-title">接通我</h2>
+        <span class="sec-en">Get in touch</span>
+      </div>
+      <div class="contact-grid">
+        <a class="ct" href="mailto:Jerry021349152022@gmail.com"><span><span class="k">Email</span><br>Jerry021349152022@gmail.com</span></a>
+        <a class="ct" href="https://github.com/jf02134915"><span><span class="k">GitHub</span><br>@jf02134915</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Jerry Fu</span>
+      <span>频率永不消失 · Signal never sleeps</span>
+    </div>
+  </footer>
+
+<script>
+  // ----- waveform bars -----
+  (function(){
+    var wave=document.getElementById('wave');
+    if(!wave) return;
+    var N=34;
+    for(var i=0;i<N;i++){
+      var b=document.createElement('span');
+      b.className='bar';
+      b.style.animationDuration=(0.9+Math.random()*1.1).toFixed(2)+'s';
+      b.style.animationDelay=(-Math.random()*1.5).toFixed(2)+'s';
+      b.style.opacity=(0.55+Math.random()*0.45).toFixed(2);
+      wave.appendChild(b);
+    }
+  })();
+
+  // ----- greeting cycle -----
+  (function(){
+    var el=document.getElementById('greet');
+    if(!el) return;
+    var words=['你好','こんにちは','おおきに','Hola','Hello'];
+    var i=0;
+    setInterval(function(){
+      el.style.opacity='0';
+      el.style.transform='translateY(8px)';
+      setTimeout(function(){
+        i=(i+1)%words.length;
+        el.textContent=words[i];
+        el.style.opacity='1';
+        el.style.transform='translateY(0)';
+      },450);
+    },2600);
+  })();
+</script>
+</body>
+</html>
