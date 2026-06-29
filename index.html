@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jerry Fu · 多语输出 / 开发</title>
+<title>Jerry Fu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Noto+Sans+SC:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17131F;
@@ -20,9 +20,14 @@
     --rose:#E7708E;
     --gold:#E8B44A;
     --violet:#B794F4;
-    --display:'Fraunces',Georgia,serif;
+    --display:'Fraunces','Noto Sans SC',Georgia,serif;
     --sans:'Noto Sans SC',system-ui,-apple-system,sans-serif;
     --mono:'Space Mono','Noto Sans SC',monospace;
+  }
+  html[lang="ja"]{
+    --display:'Fraunces','Noto Sans JP',Georgia,serif;
+    --sans:'Noto Sans JP',system-ui,-apple-system,sans-serif;
+    --mono:'Space Mono','Noto Sans JP',monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -38,17 +43,6 @@
   a{color:inherit;text-decoration:none}
   .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
 
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:.22em;
-    text-transform:uppercase;
-    color:var(--muted);
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-  }
-
   /* ---------- top bar ---------- */
   .topbar{
     position:fixed;top:0;left:0;right:0;z-index:50;
@@ -59,11 +53,21 @@
   .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{font-family:var(--mono);font-weight:700;letter-spacing:.1em;font-size:15px}
   .brand .dot{color:var(--amber)}
+  .top-right{display:flex;align-items:center;gap:26px}
   .nav{display:flex;gap:30px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--muted)}
   .nav a{transition:color .2s}
   .nav a:hover,.nav a:focus-visible{color:var(--paper)}
   .nav-cn{font-family:var(--sans);letter-spacing:.05em}
   @media(max-width:680px){.nav{display:none}}
+  .lang{display:flex;gap:4px;align-items:center}
+  .lang button{
+    font-family:var(--mono);font-size:12px;letter-spacing:.03em;
+    background:transparent;border:1px solid var(--line);color:var(--muted);
+    padding:5px 9px;border-radius:20px;cursor:pointer;line-height:1;
+    transition:color .2s,border-color .2s,background .2s;
+  }
+  .lang button:hover{color:var(--paper);border-color:var(--muted)}
+  .lang button.on{color:var(--ink);background:var(--amber);border-color:var(--amber);font-weight:700}
 
   /* ---------- live pill ---------- */
   .live{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--amber)}
@@ -97,7 +101,7 @@
     font-size:clamp(22px,3.4vw,38px);
     color:var(--paper);
     line-height:1.25;
-    max-width:18ch;
+    max-width:20ch;
     margin-bottom:14px;
   }
   .tagline .accent{color:var(--amber);font-style:normal;font-weight:600}
@@ -181,8 +185,6 @@
     transition:background .2s,color .2s,border-color .2s,transform .2s;
   }
   .dl:hover,.dl:focus-visible{background:var(--amber);color:var(--ink);border-color:var(--amber);transform:translateY(-1px)}
-  .card-arrow{position:absolute;top:28px;right:28px;color:var(--muted);transition:color .25s,transform .25s}
-  .card:hover .card-arrow{color:var(--amber);transform:translate(3px,-3px)}
 
   /* contact */
   .contact-grid{display:flex;flex-wrap:wrap;gap:14px}
@@ -210,12 +212,20 @@
   <header class="topbar">
     <div class="wrap">
       <div class="brand">JF<span class="dot">.</span></div>
-      <nav class="nav">
-        <a href="#about" class="nav-cn">关于</a>
-        <a href="#freqs" class="nav-cn">语言</a>
-        <a href="#work" class="nav-cn">作品</a>
-        <a href="#contact" class="nav-cn">联系</a>
-      </nav>
+      <div class="top-right">
+        <nav class="nav">
+          <a href="#about" class="nav-cn" data-i18n="nav_about">关于</a>
+          <a href="#freqs" class="nav-cn" data-i18n="nav_freqs">语言</a>
+          <a href="#work" class="nav-cn" data-i18n="nav_work">作品</a>
+          <a href="#contact" class="nav-cn" data-i18n="nav_contact">联系</a>
+        </nav>
+        <div class="lang" id="lang" role="group" aria-label="Language">
+          <button data-lang="zh" title="中文">中</button>
+          <button data-lang="ja" title="日本語">日</button>
+          <button data-lang="es" title="Español">ES</button>
+          <button data-lang="en" title="English">EN</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -223,24 +233,24 @@
     <div class="hero-glow"></div>
     <div class="wrap">
       <div class="hero-top">
-        <span class="live"><span class="pulse"></span>ON AIR · 向世界讲述</span>
-        <span class="freq">全语频段 · 用四种语言把中国讲给世界听</span>
+        <span class="live"><span class="pulse"></span>ON AIR · <span data-i18n="live_tag">向世界讲述</span></span>
+        <span class="freq" data-i18n="hero_freq">全语频段 · 用四种语言把中国讲给世界听</span>
       </div>
 
       <h1 class="name">Jerry&nbsp;Fu</h1>
-      <p class="tagline">四种语言,<br><span class="accent">一个声音。</span></p>
-      <p class="role">中文 · 日本語 · Español · English &nbsp;—&nbsp; 传播中国声音 · 多语表达 · 开发者</p>
+      <p class="tagline" data-i18n-html="tagline">四种语言,<br><span class="accent">一个声音。</span></p>
+      <p class="role"><span>中文 · 日本語 · Español · English &nbsp;—&nbsp;</span><span data-i18n="role_desc">传播中国声音 · 多语表达 · 开发者</span></p>
 
       <div class="greet">
-        <span class="greet-label">每天的第一句</span>
+        <span class="greet-label" data-i18n="greet_label">每天的第一句</span>
         <span class="greet-word" id="greet">你好</span>
       </div>
 
       <div class="wave" id="wave" aria-hidden="true"></div>
 
       <div class="cta-row">
-        <a href="#about" class="btn btn-fill">收听简介 ↓</a>
-        <a href="#contact" class="btn btn-line">给我留言 →</a>
+        <a href="#about" class="btn btn-fill" data-i18n="cta_about">收听简介 ↓</a>
+        <a href="#contact" class="btn btn-line" data-i18n="cta_contact">给我留言 →</a>
       </div>
     </div>
   </main>
@@ -249,11 +259,12 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-no">01</span>
-        <h2 class="sec-title">关于</h2>
+        <h2 class="sec-title" data-i18n="sec_about">关于</h2>
         <span class="sec-en">About</span>
       </div>
-      <p class="about-text">
+      <p class="about-text" data-i18n-html="about_text">
         中国传媒大学<strong>国家传播学院</strong>在读。想做一个<strong>传播中国声音的使者</strong>——把声音当作媒介,在中文、日语、西班牙语和英语之间自由切换,把中国的故事讲给世界听。
+        既能用四种语言把一件事讲清楚、讲动人,也能在终端里 flash 一套自己改的 ROM、写一个属于自己的 App。
         相信好的表达和好的代码一样:有节奏、有结构、让人愿意一直听下去。
       </p>
     </div>
@@ -263,29 +274,29 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-no">02</span>
-        <h2 class="sec-title">我的频段</h2>
+        <h2 class="sec-title" data-i18n="sec_freqs">我的频段</h2>
         <span class="sec-en">Frequencies</span>
       </div>
       <div class="freqs">
         <div class="freq-row">
           <div class="freq-lang"><span class="led" style="background:var(--amber)"></span><span class="freq-name">中文</span></div>
-          <span class="freq-note">配音 · 主持</span>
-          <span class="freq-level">母语 / NATIVE</span>
+          <span class="freq-note" data-i18n="fn_chinese">讲好中国故事 · 双语表达 · 配音</span>
+          <span class="freq-level" data-i18n="lvl_native">母语</span>
         </div>
         <div class="freq-row">
           <div class="freq-lang"><span class="led" style="background:var(--rose)"></span><span class="freq-name">日本語</span></div>
-          <span class="freq-note">朗读 · 会话 · 含关西腔（おおきに！）</span>
-          <span class="freq-level">流暢 / FLUENT</span>
+          <span class="freq-note" data-i18n="fn_japanese">朗读 · 会话 · 含关西腔（おおきに！）</span>
+          <span class="freq-level" data-i18n="lvl_fluent">流利</span>
         </div>
         <div class="freq-row">
           <div class="freq-lang"><span class="led" style="background:var(--gold)"></span><span class="freq-name">Español</span></div>
-          <span class="freq-note">朗读 · 专业方向</span>
-          <span class="freq-level">进行中 / GROWING</span>
+          <span class="freq-note" data-i18n="fn_spanish">朗读 · 对外传播 · 专业方向</span>
+          <span class="freq-level" data-i18n="lvl_growing">进行中</span>
         </div>
         <div class="freq-row">
           <div class="freq-lang"><span class="led" style="background:var(--violet)"></span><span class="freq-name">English</span></div>
-          <span class="freq-note">双语主持 · 配音</span>
-          <span class="freq-level">专业 / PRO</span>
+          <span class="freq-note" data-i18n="fn_english">国际传播 · 双语表达</span>
+          <span class="freq-level" data-i18n="lvl_pro">专业</span>
         </div>
       </div>
     </div>
@@ -295,46 +306,46 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-no">03</span>
-        <h2 class="sec-title">我写的 App</h2>
+        <h2 class="sec-title" data-i18n="sec_work">我写的 App</h2>
         <span class="sec-en">Built · Android</span>
       </div>
-      <p class="work-intro">从零写的安卓应用,原生 Kotlin、Material You 动态取色。下面可以直接下载 APK 安装。可能需要手动解除权限限制！</p>
+      <p class="work-intro" data-i18n="work_intro">都是我自己从零写的安卓应用,原生 Kotlin、Material You 动态取色。下面可以直接下载 APK 侧载安装。</p>
       <div class="grid">
         <div class="card">
           <div class="card-kind">com.jay.bulksms</div>
-          <h3 class="card-title">群发短信</h3>
-          <p class="card-desc">批量给多个联系人发同一条短信,只申请 SEND_SMS 一个权限。界面极简——选人、写内容、一键群发,发送进度用安卓 16 分段彩色通知实时显示。</p>
-          <a class="dl" href="apps/BulkSMS.apk" download>↓ 下载 APK</a>
+          <h3 class="card-title" data-i18n="t_sms">群发短信</h3>
+          <p class="card-desc" data-i18n="d_sms">批量给多个联系人发同一条短信,只申请 SEND_SMS 一个权限。界面极简——选人、写内容、一键群发,发送进度用安卓 16 分段彩色通知实时显示。</p>
+          <a class="dl" href="apps/BulkSMS.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
         <div class="card">
           <div class="card-kind">com.jay.bulkmail</div>
-          <h3 class="card-title">群发邮件</h3>
-          <p class="card-desc">从 Excel 导入收件人,App 内直接走 SMTP 发送(QQ / 163 / Gmail 等预设 + 自定义)。支持富文本正文、多附件、{name} 个性化逐人单发,可设 6–12 秒随机间隔,内置 12 种界面语言。</p>
-          <a class="dl" href="apps/BulkMail.apk" download>↓ 下载 APK</a>
+          <h3 class="card-title" data-i18n="t_mail">群发邮件</h3>
+          <p class="card-desc" data-i18n="d_mail">从 Excel 导入收件人,App 内直接走 SMTP 发送(QQ / 163 / Gmail 等预设 + 自定义)。支持富文本正文、多附件、{name} 个性化逐人单发,可设 6–12 秒随机间隔,内置 12 种界面语言。</p>
+          <a class="dl" href="apps/BulkMail.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
         <div class="card">
           <div class="card-kind">com.jay.recorder</div>
-          <h3 class="card-title">录音机</h3>
-          <p class="card-desc">前台服务录音,熄屏不中断(AAC / M4A)。录音时实时滚动波形 + 计时,列表点开内嵌播放器可拖动波形 seek。录音单独存进 Music/Recorder 目录,支持重命名、分享。</p>
-          <a class="dl" href="apps/Recorder.apk" download>↓ 下载 APK</a>
+          <h3 class="card-title" data-i18n="t_rec">录音机</h3>
+          <p class="card-desc" data-i18n="d_rec">前台服务录音,熄屏不中断(AAC / M4A)。录音时实时滚动波形 + 计时,列表点开内嵌播放器可拖动波形 seek。录音单独存进 Music/Recorder 目录,支持重命名、分享。</p>
+          <a class="dl" href="apps/Recorder.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
         <div class="card">
           <div class="card-kind">com.jay.calc</div>
-          <h3 class="card-title">计算器</h3>
-          <p class="card-desc">自写 shunting-yard 表达式引擎,支持科学计算(π / e / 根号 / 阶乘 / 三角函数)。还内置单位换算(含市里 / 亩 / 市斤)、12 种货币实时汇率,以及一个能算"堂哥 / 表妹 / 外甥"的亲属称谓计算器。</p>
-          <a class="dl" href="apps/Calculator.apk" download>↓ 下载 APK</a>
+          <h3 class="card-title" data-i18n="t_calc">计算器</h3>
+          <p class="card-desc" data-i18n="d_calc">自写 shunting-yard 表达式引擎,支持科学计算(π / e / 根号 / 阶乘 / 三角函数)。还内置单位换算(含市里 / 亩 / 市斤)、12 种货币实时汇率,以及一个能算"堂哥 / 表妹 / 外甥"的亲属称谓计算器。</p>
+          <a class="dl" href="apps/Calculator.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
         <div class="card">
           <div class="card-kind">com.jay.ical</div>
-          <h3 class="card-title">日历</h3>
-          <p class="card-desc">可无限滑动的月历,自带 1900–2100 农历引擎(24 节气 + 含除夕的传统节日)。事件与系统日历双向同步,法定节假日自动标注,支持搜索。</p>
-          <a class="dl" href="apps/Calendar.apk" download>↓ 下载 APK</a>
+          <h3 class="card-title" data-i18n="t_cal">日历</h3>
+          <p class="card-desc" data-i18n="d_cal">可无限滑动的月历,自带 1900–2100 农历引擎(24 节气 + 含除夕的传统节日)。事件与 Google 日历双向同步,法定节假日自动标注,支持搜索。</p>
+          <a class="dl" href="apps/Calendar.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
         <div class="card">
-          <div class="card-kind">传感器 · Compass</div>
-          <h3 class="card-title">指南针</h3>
-          <p class="card-desc">实时方位指南针。磁力计精度低时从底部滑出"8 字校准"动画并显示精度指示,校准到高精度后自动收起。</p>
-          <a class="dl" href="apps/Compass.apk" download>↓ 下载 APK</a>
+          <div class="card-kind">com.jay.compass</div>
+          <h3 class="card-title" data-i18n="t_comp">指南针</h3>
+          <p class="card-desc" data-i18n="d_comp">实时方位指南针。磁力计精度低时从底部滑出"8 字校准"动画并显示精度指示,校准到高精度后自动收起。</p>
+          <a class="dl" href="apps/Compass.apk" download data-i18n="dl">↓ 下载 APK</a>
         </div>
       </div>
     </div>
@@ -344,7 +355,7 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-no">04</span>
-        <h2 class="sec-title">接通我</h2>
+        <h2 class="sec-title" data-i18n="sec_contact">接通我</h2>
         <span class="sec-en">Get in touch</span>
       </div>
       <div class="contact-grid">
@@ -357,7 +368,7 @@
   <footer>
     <div class="wrap">
       <span>© 2026 Jerry Fu</span>
-      <span>频率永不消失 · Signal never sleeps</span>
+      <span data-i18n="footer_tag">频率永不消失 · Signal never sleeps</span>
     </div>
   </footer>
 
@@ -377,7 +388,7 @@
     }
   })();
 
-  // ----- greeting cycle -----
+  // ----- greeting cycle (multilingual, universal) -----
   (function(){
     var el=document.getElementById('greet');
     if(!el) return;
@@ -393,6 +404,152 @@
         el.style.transform='translateY(0)';
       },450);
     },2600);
+  })();
+
+  // ----- i18n -----
+  (function(){
+    var T={
+      zh:{
+        nav_about:`关于`, nav_freqs:`语言`, nav_work:`作品`, nav_contact:`联系`,
+        live_tag:`向世界讲述`,
+        hero_freq:`全语频段 · 用四种语言把中国讲给世界听`,
+        tagline:`四种语言,<br><span class="accent">一个声音。</span>`,
+        role_desc:`传播中国声音 · 多语表达 · 开发者`,
+        greet_label:`每天的第一句`,
+        cta_about:`收听简介 ↓`, cta_contact:`给我留言 →`,
+        sec_about:`关于`, sec_freqs:`我的频段`, sec_work:`我写的 App`, sec_contact:`接通我`,
+        about_text:`中国传媒大学<strong>国家传播学院</strong>在读。想做一个<strong>传播中国声音的使者</strong>——把声音当作媒介,在中文、日语、西班牙语和英语之间自由切换,把中国的故事讲给世界听。既能用四种语言把一件事讲清楚、讲动人,也能在终端里 flash 一套自己改的 ROM、写一个属于自己的 App。相信好的表达和好的代码一样:有节奏、有结构、让人愿意一直听下去。`,
+        fn_chinese:`讲好中国故事 · 双语表达 · 配音`,
+        fn_japanese:`朗读 · 会话 · 含关西腔（おおきに！）`,
+        fn_spanish:`朗读 · 对外传播 · 专业方向`,
+        fn_english:`国际传播 · 双语表达`,
+        lvl_native:`母语`, lvl_fluent:`流利`, lvl_growing:`进行中`, lvl_pro:`专业`,
+        work_intro:`都是我自己从零写的安卓应用,原生 Kotlin、Material You 动态取色。下面可以直接下载 APK 侧载安装。`,
+        t_sms:`群发短信`, t_mail:`群发邮件`, t_rec:`录音机`, t_calc:`计算器`, t_cal:`日历`, t_comp:`指南针`,
+        d_sms:`批量给多个联系人发同一条短信,只申请 SEND_SMS 一个权限。界面极简——选人、写内容、一键群发,发送进度用安卓 16 分段彩色通知实时显示。`,
+        d_mail:`从 Excel 导入收件人,App 内直接走 SMTP 发送(QQ / 163 / Gmail 等预设 + 自定义)。支持富文本正文、多附件、{name} 个性化逐人单发,可设 6–12 秒随机间隔,内置 12 种界面语言。`,
+        d_rec:`前台服务录音,熄屏不中断(AAC / M4A)。录音时实时滚动波形 + 计时,列表点开内嵌播放器可拖动波形 seek。录音单独存进 Music/Recorder 目录,支持重命名、分享。`,
+        d_calc:`自写 shunting-yard 表达式引擎,支持科学计算(π / e / 根号 / 阶乘 / 三角函数)。还内置单位换算(含市里 / 亩 / 市斤)、12 种货币实时汇率,以及一个能算"堂哥 / 表妹 / 外甥"的亲属称谓计算器。`,
+        d_cal:`可无限滑动的月历,自带 1900–2100 农历引擎(24 节气 + 含除夕的传统节日)。事件与 Google 日历双向同步,法定节假日自动标注,支持搜索。`,
+        d_comp:`实时方位指南针。磁力计精度低时从底部滑出"8 字校准"动画并显示精度指示,校准到高精度后自动收起。`,
+        dl:`↓ 下载 APK`,
+        footer_tag:`频率永不消失 · Signal never sleeps`
+      },
+      ja:{
+        nav_about:`概要`, nav_freqs:`言語`, nav_work:`アプリ`, nav_contact:`連絡`,
+        live_tag:`世界へ発信`,
+        hero_freq:`全周波数 · 四つの言語で中国を世界へ`,
+        tagline:`四つの言語、<br><span class="accent">一つの声。</span>`,
+        role_desc:`中国の声を伝える · 多言語 · 開発者`,
+        greet_label:`毎日の第一声`,
+        cta_about:`自己紹介を聞く ↓`, cta_contact:`メッセージを送る →`,
+        sec_about:`私について`, sec_freqs:`私の周波数`, sec_work:`作ったアプリ`, sec_contact:`連絡する`,
+        about_text:`中国伝媒大学<strong>国家伝播学院</strong>に在学中。<strong>中国の声を世界へ伝える使者</strong>になりたい——声をメディアとして、中国語・日本語・スペイン語・英語を自由に行き来し、中国の物語を世界に届ける。四つの言語で物事を分かりやすく、心に響くように伝えられるし、ターミナルで自作の ROM を焼いたり、自分のアプリを書いたりもできる。良い表現は良いコードと同じで、リズムと構造があり、ずっと聞いていたくなるものだと思っている。`,
+        fn_chinese:`中国の物語を伝える · バイリンガル · 吹き替え`,
+        fn_japanese:`朗読 · 会話 · 関西弁あり（おおきに！）`,
+        fn_spanish:`朗読 · 対外発信 · 専攻`,
+        fn_english:`国際発信 · バイリンガル`,
+        lvl_native:`母語`, lvl_fluent:`流暢`, lvl_growing:`学習中`, lvl_pro:`プロ`,
+        work_intro:`すべて自分でゼロから書いた Android アプリです。ネイティブ Kotlin、Material You のダイナミックカラー。下から APK を直接ダウンロードしてサイドロードできます。`,
+        t_sms:`一斉SMS送信`, t_mail:`一斉メール送信`, t_rec:`ボイスレコーダー`, t_calc:`電卓`, t_cal:`カレンダー`, t_comp:`コンパス`,
+        d_sms:`複数の連絡先に同じ SMS を一斉送信。権限は SEND_SMS のみ。宛先を選んで本文を書き、ワンタップで送信。進捗は Android 16 のセグメント付きカラー通知でリアルタイム表示。`,
+        d_mail:`Excel から宛先を読み込み、アプリ内で直接 SMTP 送信（QQ / 163 / Gmail などのプリセット＋カスタム）。リッチテキスト本文、複数添付、{name} で個別差し込み送信に対応。6〜12 秒のランダム間隔も設定でき、UI は 12 言語内蔵。`,
+        d_rec:`フォアグラウンドサービスで録音し、画面オフでも継続（AAC / M4A）。録音中はリアルタイムの波形＋タイマー、一覧から開くプレーヤーで波形をドラッグしてシーク可能。録音は Music/Recorder の専用フォルダに保存し、名前変更・共有に対応。`,
+        d_calc:`自作の操車場（shunting-yard）式エンジンで、科学計算（π / e / 平方根 / 階乗 / 三角関数）に対応。単位換算（中国の市里・亩・市斤を含む）、12 通貨のリアルタイム為替、さらに「いとこ・甥」などを判定する親族呼称計算機も内蔵。`,
+        d_cal:`無限にスワイプできる月表示カレンダー。1900〜2100 年の旧暦エンジン（二十四節気＋大晦日を含む伝統行事）を内蔵。予定は Google カレンダーと双方向同期し、祝日を自動表示、検索にも対応。`,
+        d_comp:`リアルタイムの方位コンパス。磁気センサーの精度が低いときは下から「8 の字キャリブレーション」アニメーションがせり出し、精度インジケーターを表示。高精度になると自動で閉じる。`,
+        dl:`↓ APK をダウンロード`,
+        footer_tag:`周波数は途切れない · Signal never sleeps`
+      },
+      es:{
+        nav_about:`Perfil`, nav_freqs:`Idiomas`, nav_work:`Apps`, nav_contact:`Contacto`,
+        live_tag:`Contando al mundo`,
+        hero_freq:`Todas las frecuencias · Contando China al mundo en cuatro idiomas`,
+        tagline:`Cuatro idiomas,<br><span class="accent">una sola voz.</span>`,
+        role_desc:`La voz de China · Multilingüe · Desarrollador`,
+        greet_label:`La primera frase del día`,
+        cta_about:`Escuchar intro ↓`, cta_contact:`Escríbeme →`,
+        sec_about:`Sobre mí`, sec_freqs:`Mis frecuencias`, sec_work:`Apps que he creado`, sec_contact:`Contáctame`,
+        about_text:`Estudiante en la <strong>Facultad de Comunicación Nacional</strong> de la Communication University of China. Quiero ser un <strong>mensajero que lleva la voz de China al mundo</strong>: uso la voz como medio y me muevo con soltura entre el chino, el japonés, el español y el inglés para contar las historias de China. Puedo explicar algo con claridad y emoción en cuatro idiomas, y también flashear una ROM propia en la terminal o escribir mi propia app. Creo que una buena expresión es como un buen código: tiene ritmo, estructura y hace que quieras seguir escuchando.`,
+        fn_chinese:`Contar China · Bilingüe · Doblaje`,
+        fn_japanese:`Lectura · Conversación · con acento de Kansai (¡おおきに!)`,
+        fn_spanish:`Lectura · Comunicación internacional · Mi carrera`,
+        fn_english:`Comunicación global · Bilingüe`,
+        lvl_native:`Nativo`, lvl_fluent:`Fluido`, lvl_growing:`En progreso`, lvl_pro:`Profesional`,
+        work_intro:`Todas son apps de Android que escribí desde cero, en Kotlin nativo con colores dinámicos de Material You. Puedes descargar el APK abajo e instalarlo manualmente.`,
+        t_sms:`SMS masivos`, t_mail:`Correo masivo`, t_rec:`Grabadora`, t_calc:`Calculadora`, t_cal:`Calendario`, t_comp:`Brújula`,
+        d_sms:`Envía el mismo SMS a varios contactos a la vez. Solo pide el permiso SEND_SMS. Interfaz mínima: eliges contactos, escribes el mensaje y envías con un toque; el progreso se muestra en tiempo real con la notificación segmentada de Android 16.`,
+        d_mail:`Importa destinatarios desde Excel y envía por SMTP dentro de la app (QQ / 163 / Gmail y otros, más servidor propio). Admite cuerpo con formato, varios adjuntos y envío individual con personalización {name}; intervalo aleatorio de 6–12 s y 12 idiomas de interfaz.`,
+        d_rec:`Graba mediante un servicio en primer plano y no se corta con la pantalla apagada (AAC / M4A). Muestra forma de onda y cronómetro en tiempo real; el reproductor integrado permite arrastrar la onda para buscar. Guarda en una carpeta propia Music/Recorder y permite renombrar y compartir.`,
+        d_calc:`Motor de expresiones propio (shunting-yard) con cálculo científico (π / e / raíz / factorial / trigonometría). Incluye conversor de unidades (con unidades chinas como 市里 / 亩 / 市斤), tipos de cambio en tiempo real de 12 monedas y una calculadora de parentesco que resuelve títulos como "primo" o "sobrino".`,
+        d_cal:`Calendario mensual con desplazamiento infinito y motor del calendario lunar 1900–2100 (24 términos solares y fiestas tradicionales, incluida la Nochevieja china). Sincroniza eventos en ambos sentidos con Google Calendar, marca los festivos y permite búsqueda.`,
+        d_comp:`Brújula de orientación en tiempo real. Cuando el magnetómetro tiene poca precisión, aparece desde abajo una animación de calibración en "figura de 8" con indicador de precisión, y se cierra sola al alcanzar alta precisión.`,
+        dl:`↓ Descargar APK`,
+        footer_tag:`La señal nunca duerme · Signal never sleeps`
+      },
+      en:{
+        nav_about:`About`, nav_freqs:`Languages`, nav_work:`Apps`, nav_contact:`Contact`,
+        live_tag:`Telling the world`,
+        hero_freq:`All frequencies · Telling China's story to the world in four languages`,
+        tagline:`Four languages,<br><span class="accent">one voice.</span>`,
+        role_desc:`China's voice · Multilingual · Developer`,
+        greet_label:`The first thing I say`,
+        cta_about:`Listen in ↓`, cta_contact:`Get in touch →`,
+        sec_about:`About me`, sec_freqs:`My frequencies`, sec_work:`Apps I built`, sec_contact:`Reach me`,
+        about_text:`Studying at the <strong>National School of Communication</strong>, Communication University of China. I want to be a <strong>messenger who carries China's voice to the world</strong> — using voice as the medium, moving freely between Chinese, Japanese, Spanish and English to tell China's stories. I can make a point clearly and movingly in four languages, and I can also flash a custom ROM in the terminal or write an app of my own. I believe good expression is like good code: it has rhythm, structure, and makes you want to keep listening.`,
+        fn_chinese:`Telling China's story · Bilingual · Voice`,
+        fn_japanese:`Reading · Conversation · Kansai dialect (おおきに!)`,
+        fn_spanish:`Reading · Outreach · My major`,
+        fn_english:`Global communication · Bilingual`,
+        lvl_native:`Native`, lvl_fluent:`Fluent`, lvl_growing:`Growing`, lvl_pro:`Professional`,
+        work_intro:`All Android apps I wrote from scratch — native Kotlin, Material You dynamic color. You can download each APK below and sideload it.`,
+        t_sms:`Bulk SMS`, t_mail:`Bulk Mail`, t_rec:`Recorder`, t_calc:`Calculator`, t_cal:`Calendar`, t_comp:`Compass`,
+        d_sms:`Send the same SMS to many contacts at once. Asks for only the SEND_SMS permission. Minimal UI — pick contacts, write the message, send in one tap; progress shows live via Android 16's segmented color notification.`,
+        d_mail:`Import recipients from Excel and send over SMTP right in the app (QQ / 163 / Gmail presets + custom). Supports a rich-text body, multiple attachments, and per-person sending with {name} personalization; optional 6–12 s random interval and 12 UI languages.`,
+        d_rec:`Records via a foreground service and keeps going with the screen off (AAC / M4A). Live scrolling waveform + timer while recording; the inline player lets you drag the waveform to seek. Saves to a dedicated Music/Recorder folder, with rename and share.`,
+        d_calc:`A hand-written shunting-yard expression engine with scientific functions (π / e / roots / factorial / trig). Plus a unit converter (including Chinese units like 市里 / 亩 / 市斤), live exchange rates for 12 currencies, and a kinship calculator that works out titles like "cousin" or "nephew".`,
+        d_cal:`An infinitely swipeable month calendar with a built-in 1900–2100 lunar engine (24 solar terms + traditional festivals, including Lunar New Year's Eve). Events sync both ways with Google Calendar, public holidays are marked automatically, and there's search.`,
+        d_comp:`A real-time bearing compass. When the magnetometer's accuracy is low, a "figure-8 calibration" animation slides up with an accuracy indicator, then auto-dismisses once it reaches high accuracy.`,
+        dl:`↓ Download APK`,
+        footer_tag:`Signal never sleeps`
+      }
+    };
+
+    var DOCTITLE={
+      zh:`Jerry Fu · 传播中国声音 / 多语 / 开发`,
+      ja:`Jerry Fu · 中国の声を世界へ / 多言語 / 開発`,
+      es:`Jerry Fu · La voz de China / Multilingüe / Desarrollo`,
+      en:`Jerry Fu · China's voice / Multilingual / Developer`
+    };
+    var HTMLLANG={zh:`zh-CN`, ja:`ja`, es:`es`, en:`en`};
+
+    function setLang(lang){
+      if(!T[lang]) lang='zh';
+      var d=T[lang];
+      document.querySelectorAll('[data-i18n]').forEach(function(el){
+        var k=el.getAttribute('data-i18n');
+        if(d[k]!=null) el.textContent=d[k];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+        var k=el.getAttribute('data-i18n-html');
+        if(d[k]!=null) el.innerHTML=d[k];
+      });
+      document.documentElement.lang=HTMLLANG[lang]||lang;
+      if(DOCTITLE[lang]) document.title=DOCTITLE[lang];
+      document.querySelectorAll('.lang button').forEach(function(b){
+        b.classList.toggle('on', b.getAttribute('data-lang')===lang);
+      });
+      try{ localStorage.setItem('site_lang', lang); }catch(e){}
+    }
+
+    var saved=null;
+    try{ saved=localStorage.getItem('site_lang'); }catch(e){}
+    var nv=(navigator.language||'').toLowerCase();
+    var def=saved || (nv.indexOf('zh')===0?'zh':nv.indexOf('ja')===0?'ja':nv.indexOf('es')===0?'es':nv.indexOf('en')===0?'en':'zh');
+    document.querySelectorAll('.lang button').forEach(function(b){
+      b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+    });
+    setLang(def);
   })();
 </script>
 </body>
