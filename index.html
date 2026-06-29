@@ -171,7 +171,16 @@
   .card:hover{transform:translateY(-4px);border-color:rgba(255,122,69,.4)}
   .card-kind{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:18px}
   .card-title{font-family:var(--display);font-size:25px;font-weight:600;margin-bottom:10px}
-  .card-desc{color:var(--muted);font-size:15px}
+  .card-desc{color:var(--muted);font-size:15px;margin-bottom:20px}
+  .work-intro{color:#C9C0D4;font-size:clamp(15px,1.8vw,17px);line-height:1.65;max-width:60ch;margin:-26px 0 42px}
+  .dl{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.05em;
+    color:var(--amber);border:1px solid rgba(255,122,69,.4);
+    padding:9px 16px;border-radius:30px;
+    transition:background .2s,color .2s,border-color .2s,transform .2s;
+  }
+  .dl:hover,.dl:focus-visible{background:var(--amber);color:var(--ink);border-color:var(--amber);transform:translateY(-1px)}
   .card-arrow{position:absolute;top:28px;right:28px;color:var(--muted);transition:color .25s,transform .25s}
   .card:hover .card-arrow{color:var(--amber);transform:translate(3px,-3px)}
 
@@ -204,6 +213,7 @@
       <nav class="nav">
         <a href="#about" class="nav-cn">关于</a>
         <a href="#freqs" class="nav-cn">语言</a>
+        <a href="#work" class="nav-cn">作品</a>
         <a href="#contact" class="nav-cn">联系</a>
       </nav>
     </div>
@@ -213,16 +223,16 @@
     <div class="hero-glow"></div>
     <div class="wrap">
       <div class="hero-top">
-        <span class="live"><span class="pulse"></span>ON AIR · 正在播出</span>
-        <span class="freq">FM 88.6 · 全语频段 / ALL FREQUENCIES</span>
+        <span class="live"><span class="pulse"></span>ON AIR · 向世界讲述</span>
+        <span class="freq">全语频段 · 用四种语言把中国讲给世界听</span>
       </div>
 
       <h1 class="name">Jerry&nbsp;Fu</h1>
       <p class="tagline">四种语言,<br><span class="accent">一个声音。</span></p>
-      <p class="role">中文 · 日本語 · Español · English &nbsp;—&nbsp; Broadcaster / Voice / Developer</p>
+      <p class="role">中文 · 日本語 · Español · English &nbsp;—&nbsp; 传播中国声音 · 多语表达 · 开发者</p>
 
       <div class="greet">
-        <span class="greet-label">每天开播于</span>
+        <span class="greet-label">每天的第一句</span>
         <span class="greet-word" id="greet">你好</span>
       </div>
 
@@ -243,9 +253,9 @@
         <span class="sec-en">About</span>
       </div>
       <p class="about-text">
-        中国传媒大学<strong>西班牙语</strong>在读。把声音当作媒介,在中文、日语、西班牙语和英语之间自由切换——做<strong>播音、配音</strong>,也写代码、做产品。
-        既能在话筒前讲一段干净的双语新闻,也能在终端里 flash 一套自己改的 ROM。
-        相信好的声音和好的代码一样:有节奏、有结构、让人愿意一直听下去。
+        中国传媒大学<strong>国家传播学院</strong>在读。想做一个<strong>传播中国声音的使者</strong>——把声音当作媒介,在中文、日语、西班牙语和英语之间自由切换,把中国的故事讲给世界听。
+        既能用四种语言把一件事讲清楚、讲动人,也能在终端里 flash 一套自己改的 ROM、写一个属于自己的 App。
+        相信好的表达和好的代码一样:有节奏、有结构、让人愿意一直听下去。
       </p>
     </div>
   </section>
@@ -282,10 +292,59 @@
     </div>
   </section>
 
-  <section id="contact">
+  <section id="work">
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-no">03</span>
+        <h2 class="sec-title">我写的 App</h2>
+        <span class="sec-en">Built · Android</span>
+      </div>
+      <p class="work-intro">都是我自己从零写的安卓应用,原生 Kotlin、Material You 动态取色。下面可以直接下载 APK 侧载安装。</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-kind">com.jay.bulksms</div>
+          <h3 class="card-title">群发短信</h3>
+          <p class="card-desc">批量给多个联系人发同一条短信,只申请 SEND_SMS 一个权限。界面极简——选人、写内容、一键群发,发送进度用安卓 16 分段彩色通知实时显示。</p>
+          <a class="dl" href="apps/BulkSMS.apk" download>↓ 下载 APK</a>
+        </div>
+        <div class="card">
+          <div class="card-kind">com.jay.bulkmail</div>
+          <h3 class="card-title">群发邮件</h3>
+          <p class="card-desc">从 Excel 导入收件人,App 内直接走 SMTP 发送(QQ / 163 / Gmail 等预设 + 自定义)。支持富文本正文、多附件、{name} 个性化逐人单发,可设 6–12 秒随机间隔,内置 12 种界面语言。</p>
+          <a class="dl" href="apps/BulkMail.apk" download>↓ 下载 APK</a>
+        </div>
+        <div class="card">
+          <div class="card-kind">com.jay.recorder</div>
+          <h3 class="card-title">录音机</h3>
+          <p class="card-desc">前台服务录音,熄屏不中断(AAC / M4A)。录音时实时滚动波形 + 计时,列表点开内嵌播放器可拖动波形 seek。录音单独存进 Music/Recorder 目录,支持重命名、分享。</p>
+          <a class="dl" href="apps/Recorder.apk" download>↓ 下载 APK</a>
+        </div>
+        <div class="card">
+          <div class="card-kind">com.jay.calc</div>
+          <h3 class="card-title">计算器</h3>
+          <p class="card-desc">自写 shunting-yard 表达式引擎,支持科学计算(π / e / 根号 / 阶乘 / 三角函数)。还内置单位换算(含市里 / 亩 / 市斤)、12 种货币实时汇率,以及一个能算"堂哥 / 表妹 / 外甥"的亲属称谓计算器。</p>
+          <a class="dl" href="apps/Calculator.apk" download>↓ 下载 APK</a>
+        </div>
+        <div class="card">
+          <div class="card-kind">com.jay.ical</div>
+          <h3 class="card-title">日历</h3>
+          <p class="card-desc">可无限滑动的月历,自带 1900–2100 农历引擎(24 节气 + 含除夕的传统节日)。事件与 Google 日历双向同步,法定节假日自动标注,支持搜索。</p>
+          <a class="dl" href="apps/Calendar.apk" download>↓ 下载 APK</a>
+        </div>
+        <div class="card">
+          <div class="card-kind">传感器 · Compass</div>
+          <h3 class="card-title">指南针</h3>
+          <p class="card-desc">实时方位指南针。磁力计精度低时从底部滑出"8 字校准"动画并显示精度指示,校准到高精度后自动收起。</p>
+          <a class="dl" href="apps/Compass.apk" download>↓ 下载 APK</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no">04</span>
         <h2 class="sec-title">接通我</h2>
         <span class="sec-en">Get in touch</span>
       </div>
